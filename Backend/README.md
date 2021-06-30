@@ -10,3 +10,9 @@ Configurar os arquivos:
 - [**Router.php**](https://github.com/ItaloG/Projeto-FastParking-API/blob/main/Backend/App/Core/Router.php) com infomações dos recursos (campos) disponiveis no banco de dados.
 
 - É necessário tem o **composer** instalado em sua maquina e alterar seus autoloads
+
+## Entradas da API 
+
+**URL**             | **Método**     | **Descrição**
+--------------------|----------------|-
+/Precos             | GET            | Retorna todos preços ja registrados no DB
