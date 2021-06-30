@@ -29,7 +29,7 @@ class Router
         if (isset($url[1]) && file_exists("../App/Controller/" . $url[1] . ".php")) {
             $this->controller = $url[1];
             unset($url[1]);
-        }else{
+        } else {
             print_r($url);
             echo "Algo deu errado :(";
         }
@@ -49,10 +49,10 @@ class Router
             case "GET":
                 if (!isset($url[2])) {
                     $this->controllerMethod = "index";
-                }elseif(is_numeric($url[2])){
+                } elseif (is_numeric($url[2])) {
                     $this->controllerMethod = "find";
                     $this->params = [$url[2]];
-                }else{
+                } else {
                     http_response_code(400);
                     echo json_encode(["erro" => "Parâmetro inválido"], JSON_UNESCAPED_UNICODE);
                     exit;
@@ -89,10 +89,11 @@ class Router
         return explode("/", $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
     }
 
-    private function getParams($url){
-        if(isset($url[2]) && is_numeric($url[2])){
+    private function getParams($url)
+    {
+        if (isset($url[2]) && is_numeric($url[2])) {
             $this->params = [$url[2]];
-        }else{
+        } else {
             http_response_code(400); //400 bad request
             echo json_encode(["erro" => "Parâmetro inválido"], JSON_UNESCAPED_UNICODE);
             exit;

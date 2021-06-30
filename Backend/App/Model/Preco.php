@@ -74,7 +74,8 @@ class Preco
         }
     }
 
-    public function getDateTime(){
+    public function getDateTime()
+    {
         $sql = " SELECT current_timestamp() as dataHoraAtual ";
 
         $stmt = Model::getConexao()->prepare($sql);
