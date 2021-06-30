@@ -31,7 +31,7 @@ class Preco
     {
         $sql = " INSERT INTO tblPrecos 
                 (dataHora, idCarro, primeiraHora, demaisHoras) 
-                VALUES  (?, ?, ?, ?) ";
+                VALUES  (now(), ?, ?, ?) ";
 
         $stmt = Model::getConexao()->prepare($sql);
         $stmt->bindValue(1, $this->dataHora);

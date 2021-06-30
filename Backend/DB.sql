@@ -5,32 +5,40 @@ use fastParking;
 create table tblCarros (
 	idCarro int primary key not null auto_increment,
     nome varchar(45) not null,
-    laca varchar(8) not null,
+    placa varchar(8) not null,
     dataEntrada date not null,
     horaEntrada time not null,
     horaSaida time,
 	valorPago decimal,
-    unique key (idCarro)
+    statusCarro boolean not null,
+    idPreco int not null,
+    unique key (idCarro),
+	constraint FK_Precos_Carros
+    foreign key (idPreco) 
+    references tblPrecos (idPreco)
 );
+
+drop table tblCarros, tblPrecos;
+select * from tblPrecos;
 
 create table tblPrecos (
 	idPreco int primary key not null auto_increment,
     primeiraHora int not null,
     demaisHoras int not null,
 	dataHora datetime,
-    idCarro int not null,
-    unique key (idPreco),
-    constraint FK_Carros_Precos
-    foreign key (idCarro)
-    references tblCarros (idCarro)
+    unique key (idPreco)
 );
         
-insert into tblCarros (nome, dataEntrada, horaEntrada, valorPago, placa) 
-	values ('Maria Silva', '2021-06-28', '11:32:00', 0.0, 'KKK-3132');
+insert into tblCarros (nome, placa, dataEntrada, horaEntrada,statusCarro, idPreco) 
+	values ('Maria Silva','KKK-3132', '2021-06-28', '11:32:00',  1, 1 );
     
+    UPDATE tblCarros SET statusCarro = 1 WHERE idCarro = 1;
+    
+INSERT INTO tblPrecos (dataHora, primeiraHora, demaisHoras) 
+	VALUES  (now(), 2, 10);
 
-insert into tblPrecos (dataHora, idCarro, primeiraHora, demaisHoras) 
-	values ('2021-06-28 11:39:00', 2, 2, 5);
-
+select * from tblCarros;
 select * from tblPrecos;
+
+
 

@@ -23,7 +23,7 @@ class Precos extends Controller
             echo json_encode($preco, JSON_UNESCAPED_UNICODE);
         } else {
             http_response_code(400);
-            echo json_encode(["erro" => "Categoria não encontrada"], JSON_UNESCAPED_UNICODE);
+            echo json_encode(["erro" => "Preço não encontrada"], JSON_UNESCAPED_UNICODE);
         }
     }
 
