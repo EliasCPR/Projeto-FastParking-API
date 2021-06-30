@@ -13,13 +13,27 @@ class Precos extends Controller
         echo json_encode($precos, JSON_UNESCAPED_UNICODE);
     }
 
+    public function find($id)
+    {
+
+        $precoModel = $this->Model("Preco");
+        $preco = $precoModel->buscarPorId($id);
+
+        if ($preco) {
+            echo json_encode($preco, JSON_UNESCAPED_UNICODE);
+        } else {
+            http_response_code(400);
+            echo json_encode(["erro" => "Categoria não encontrada"], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
     public function store()
     {
         $novoPreco = $this->getRequestBody();
 
         $precoModel = $this->Model("Preco");
 
-        $precoModel->dataHora = $novoPreco->dataHora;
+        $precoModel->dataHora = $precoModel->getDateTime();
         $precoModel->idCarro = $novoPreco->idCarro;
         $precoModel->primeiraHora = $novoPreco->primeiraHora;
         $precoModel->demaisHoras = $novoPreco->demaisHoras;

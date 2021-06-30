@@ -28,7 +28,9 @@ create table tblPrecos (
 insert into tblCarros (nome, dataEntrada, horaEntrada, valorPago, placa) 
 	values ('Maria Silva', '2021-06-28', '11:32:00', 0.0, 'KKK-3132');
     
-select * from tblPrecos;
 
 insert into tblPrecos (dataHora, idCarro, primeiraHora, demaisHoras) 
 	values ('2021-06-28 11:39:00', 2, 2, 5);
+
+select * from tblPrecos;
+
