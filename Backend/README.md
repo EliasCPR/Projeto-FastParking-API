@@ -10,7 +10,7 @@ Configurar os arquivos:
 - [**Router.php**](https://github.com/ItaloG/Projeto-FastParking-API/blob/main/Backend/App/Core/Router.php) com infomações dos recursos (campos) disponiveis no banco de dados.
 
 - É necessário tem o **composer** instalado em sua maquina e alterar seus autoloads
-
+   <center>
 ## Entradas da API 
 
 **URL**             | **Método**     | **Descrição**
@@ -21,3 +21,5 @@ Configurar os arquivos:
 /Carros             | POST           | Registra um carro
 /Carros/:id         | PUT            | Atualiza os dados de um carro pelo id
 /Carros/:id         | DELETE         | Muda o status do carro e gera o valor a ser pago
+
+</center>
