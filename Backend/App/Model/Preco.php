@@ -43,15 +43,4 @@ class Preco
             return false;
         }
     }
-
-    public function getDateTime()
-    {
-        $sql = " SELECT current_timestamp() as dataHoraAtual ";
-
-        $stmt = Model::getConexao()->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-        return $result[0]->dataHoraAtual;
-    }
 }
