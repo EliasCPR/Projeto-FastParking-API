@@ -54,7 +54,7 @@ class Carro
 
     public function getpreco()
     {
-        $sql = " SELECT MAX(idPreco) as idPreco FROM tblPrecos ";
+        $sql = " SELECT MAX(idPreco) as idPreco, primeiraHora, demaisHoras  FROM tblPrecos ";
 
         $stmt = Model::getConexao()->prepare($sql);
         $stmt->execute();
@@ -68,17 +68,18 @@ class Carro
         }
     }
 
-    public function findById($id){
+    public function findById($id)
+    {
         $sql = " SELECT * FROM tblCarros WHERE idCarro = ? ";
 
         $stmt = Model::getConexao()->prepare($sql);
         $stmt->bindValue(1, $id);
         $stmt->execute();
 
-        if($stmt->rowCount() > 0){
+        if ($stmt->rowCount() > 0) {
             $carro = $stmt->fetch(PDO::FETCH_OBJ);
 
-            $this->idCarro = $carro->id;
+            $this->idCarro = $carro->idCarro;
             $this->nome = $carro->nome;
             $this->placa = $carro->placa;
             $this->dataEntrada = $carro->dataEntrada;
@@ -89,21 +90,84 @@ class Carro
             $this->idPreco = $carro->idPreco;
 
             return $this;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function update(){
+    public function update()
+    {
         $sql = " UPDATE tblCarros  
                  SET nome = ?, placa = ? 
-                 where idCarro = ? ";
+                 WHERE idCarro = ? ";
 
         $stmt = Model::getConexao()->prepare($sql);
         $stmt->bindValue(1, $this->nome);
         $stmt->bindValue(2, $this->placa);
-        $stmt->bindValue(3, $this->id);
+        $stmt->bindValue(3, $this->idCarro);
 
         return $stmt->execute();
+    }
+
+    public function delete()
+    {
+        $sql = " UPDATE tblCarros 
+                 SET horaSaida = curtime(), valorPago = ?, statusCarro = 0  
+                 WHERE idCarro = ? ";
+
+        $stmt = Model::getConexao()->prepare($sql);
+        $stmt->bindValue(1, $this->valorPago);
+        $stmt->bindValue(2, $this->idCarro);
+
+        return $stmt->execute();
+    }
+
+    public function getDiference(){
+        $sql = " SELECT timediff( ?, ? ) AS diferenca ";
+
+        $stmt = Model::getConexao()->prepare($sql);
+        $stmt->bindValue(1, $this->horaSaida);
+        $stmt->bindValue(2, $this->horaEntrada);
+        $stmt->execute();
+  
+        if ($stmt->rowCount() > 0) {
+            $valor = $stmt->fetch(PDO::FETCH_OBJ);
+
+            return $valor;
+        } else {
+            return [];
+        }
+    }
+
+    public function getHourIn($hour)
+    {
+        $sql = " SELECT time_format( '$hour', '%H') as hora";
+
+        $stmt = Model::getConexao()->prepare($sql);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $hour = $stmt->fetch(PDO::FETCH_OBJ);
+
+            return $hour;
+        } else {
+            return [];
+        }
+    }
+
+    public function getNowHour()
+    {
+        $sql = " SELECT curtime() as hora";
+
+        $stmt = Model::getConexao()->prepare($sql);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $hour = $stmt->fetch(PDO::FETCH_OBJ);
+
+            return $hour;
+        } else {
+            return [];
+        }
     }
 }

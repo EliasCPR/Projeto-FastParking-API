@@ -38,6 +38,70 @@ class Carros extends Controller
     }
     public function update($id)
     {
-        
+        $carroEditar = $this->getRequestBody();
+
+        $carroModel = $this->Model("Carro");
+        $carroModel = $carroModel->findById($id);
+
+        if (!$carroModel) {
+            http_response_code(404);
+            echo json_encode(["erro" => "Carro não encontrada"]);
+            exit();
+        }
+
+        $carroModel->nome = $carroEditar->nome;
+        $carroModel->placa = $carroEditar->placa;
+
+        if ($carroModel->update()) {
+            http_response_code(204);
+        } else {
+            http_response_code(500);
+            echo json_encode(["erro " => "Problemas ao editar carro"]);
+        }
+    }
+
+    public function delete($id)
+    {
+        $carroModel = $this->Model("Carro");
+        $carroModel = $carroModel->findById($id);
+
+        if (!$carroModel) {
+            http_response_code(404);
+            echo json_encode(["erro" => "Carro não encontrada"]);
+            exit();
+        }
+
+        $valorPrimeiraHora = $carroModel->getPreco()->primeiraHora;
+        $valorDemaisHoras = $carroModel->getPreco()->demaisHoras;
+
+        $horaEntrada = floatval($carroModel->getHourIn($carroModel->horaEntrada)->hora);
+        $carroModel->horaSaida = $carroModel->getNowHour()->hora;
+        $horaSaida = floatval($carroModel->getHourIn($carroModel->horaSaida)->hora);
+
+        $horasEstacionado = $horaEntrada = $horaSaida;
+        if($horasEstacionado < 0){
+            $horasEstacionado *= -1;
+        }
+        if($horasEstacionado > 1){
+            $demaisHorasEstacionado = $horasEstacionado - 1;
+            $carroModel->valorPago = $demaisHorasEstacionado * floatval($valorDemaisHoras);
+            $carroModel->valorPago += floatval($valorPrimeiraHora);
+        }else{
+            $carroModel->valorPago = floatval($valorPrimeiraHora);
+        }
+
+        // horaSaida
+        // $carroModel->horaSaida = $carroModel->getNowHour()->hora;
+        // $diferençaHoras = $carroModel->getDiference();
+
+        // $horaEntrada = $carroModel->getHourIn($carroModel->horaEntrada);
+        // $horaSaida = $carroModel->getHourIn($carroModel->horaSaida);
+
+        if ($carroModel->delete()) {
+            http_response_code(204);
+        } else {
+            http_response_code(500);
+            echo json_encode(["erro " => "Problemas ao editar carro"]);
+        }
     }
 }
