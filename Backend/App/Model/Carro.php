@@ -44,10 +44,10 @@ class Carro
         $stmt->bindValue(3, $this->statusCarro);
         $stmt->bindValue(4, $this->idPreco);
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             $this->idCarro = Model::getConexao()->lastInsertId();
             return $this;
-        }else{
+        } else {
             return false;
         }
     }
@@ -66,5 +66,44 @@ class Carro
         } else {
             return [];
         }
+    }
+
+    public function findById($id){
+        $sql = " SELECT * FROM tblCarros WHERE idCarro = ? ";
+
+        $stmt = Model::getConexao()->prepare($sql);
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0){
+            $carro = $stmt->fetch(PDO::FETCH_OBJ);
+
+            $this->idCarro = $carro->id;
+            $this->nome = $carro->nome;
+            $this->placa = $carro->placa;
+            $this->dataEntrada = $carro->dataEntrada;
+            $this->horaEntrada = $carro->horaEntrada;
+            $this->horaSaida = $carro->horaSaida;
+            $this->valorPago = $carro->valorPago;
+            $this->statusCarro = $carro->statusCarro;
+            $this->idPreco = $carro->idPreco;
+
+            return $this;
+        }else{
+            return false;
+        }
+    }
+
+    public function update(){
+        $sql = " UPDATE tblCarros  
+                 SET nome = ?, placa = ? 
+                 where idCarro = ? ";
+
+        $stmt = Model::getConexao()->prepare($sql);
+        $stmt->bindValue(1, $this->nome);
+        $stmt->bindValue(2, $this->placa);
+        $stmt->bindValue(3, $this->id);
+
+        return $stmt->execute();
     }
 }
