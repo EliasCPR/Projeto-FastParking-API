@@ -30,8 +30,9 @@ class Router
             $this->controller = $url[1];
             unset($url[1]);
         } else {
-            print_r($url);
+            // print_r($url);
             echo "Algo deu errado :(";
+            exit;
         }
 
         //importamos o controlelr
@@ -49,9 +50,6 @@ class Router
             case "GET":
                 if (!isset($url[2])) {
                     $this->controllerMethod = "index";
-                } elseif (is_numeric($url[2])) {
-                    $this->controllerMethod = "find";
-                    $this->params = [$url[2]];
                 } else {
                     http_response_code(400);
                     echo json_encode(["erro" => "Parâmetro inválido"], JSON_UNESCAPED_UNICODE);
