@@ -25,7 +25,13 @@ class Carros extends Controller
         $carroModel->placa = $novoCarro->placa;
         $carroModel->idPreco = $carroModel->getPreco()->idPreco;
 
+        $erros = $this->validarCampos();
+        if (count($erros) > 0) {
+            http_response_code(404);
+            echo json_encode($erros, JSON_UNESCAPED_UNICODE);
 
+            exit();
+        }
         $carroModel = $carroModel->insert();
 
         if ($carroModel) {
@@ -51,6 +57,14 @@ class Carros extends Controller
 
         $carroModel->nome = $carroEditar->nome;
         $carroModel->placa = $carroEditar->placa;
+
+        $erros = $this->validarCampos();
+        if (count($erros) > 0) {
+            http_response_code(404);
+            echo json_encode($erros, JSON_UNESCAPED_UNICODE);
+
+            exit();
+        }
 
         if ($carroModel->update()) {
             http_response_code(204);
@@ -78,15 +92,15 @@ class Carros extends Controller
         $carroModel->horaSaida = $carroModel->getNowHour()->hora;
         $horaSaida = floatval($carroModel->getHourIn($carroModel->horaSaida)->hora);
 
-        $horasEstacionado = $horaEntrada = $horaSaida;
-        if($horasEstacionado < 0){
+        $horasEstacionado = $horaEntrada - $horaSaida;
+        if ($horasEstacionado < 0) {
             $horasEstacionado *= -1;
         }
-        if($horasEstacionado > 1){
+        if ($horasEstacionado > 1) {
             $demaisHorasEstacionado = $horasEstacionado - 1;
             $carroModel->valorPago = $demaisHorasEstacionado * floatval($valorDemaisHoras);
             $carroModel->valorPago += floatval($valorPrimeiraHora);
-        }else{
+        } else {
             $carroModel->valorPago = floatval($valorPrimeiraHora);
         }
 
@@ -103,5 +117,21 @@ class Carros extends Controller
             http_response_code(500);
             echo json_encode(["erro " => "Problemas ao editar carro"]);
         }
+    }
+
+    private function validarCampos()
+    {
+        $carroModel = $this->Model("Carro");
+        $erros = [];
+
+        if (!isset($carroModel->nome) && $carroModel->nome == "") {
+            $erros[] = "O campo nome é obrigatório";
+        }
+
+        if (!isset($carroModel->placa) && $carroModel->placa == "") {
+            $erros[] = "O campo placa é obrigatório";
+        }
+
+        return $erros;
     }
 }
