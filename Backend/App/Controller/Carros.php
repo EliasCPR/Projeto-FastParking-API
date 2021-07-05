@@ -11,6 +11,7 @@ class Carros extends Controller
 
         $carros = $carroModel->listAll();
 
+
         echo json_encode($carros, JSON_UNESCAPED_UNICODE);
     }
 
@@ -25,13 +26,13 @@ class Carros extends Controller
         $carroModel->placa = $novoCarro->placa;
         $carroModel->idPreco = $carroModel->getPreco()->idPreco;
 
-        $erros = $this->validarCampos();
-        if (count($erros) > 0) {
-            http_response_code(404);
-            echo json_encode($erros, JSON_UNESCAPED_UNICODE);
+        // $erros = $this->validarCampos();
+        // if (count($erros) > 0) {
+        //     http_response_code(404);
+        //     echo json_encode($erros, JSON_UNESCAPED_UNICODE);
 
-            exit();
-        }
+        //     exit();
+        // }
         $carroModel = $carroModel->insert();
 
         if ($carroModel) {
@@ -58,13 +59,13 @@ class Carros extends Controller
         $carroModel->nome = $carroEditar->nome;
         $carroModel->placa = $carroEditar->placa;
 
-        $erros = $this->validarCampos();
-        if (count($erros) > 0) {
-            http_response_code(404);
-            echo json_encode($erros, JSON_UNESCAPED_UNICODE);
+        // $erros = $this->validarCampos();
+        // if (count($erros) > 0) {
+        //     http_response_code(404);
+        //     echo json_encode($erros, JSON_UNESCAPED_UNICODE);
 
-            exit();
-        }
+        //     exit();
+        // }
 
         if ($carroModel->update()) {
             http_response_code(204);
@@ -124,11 +125,11 @@ class Carros extends Controller
         $carroModel = $this->Model("Carro");
         $erros = [];
 
-        if (!isset($carroModel->nome) && $carroModel->nome == "") {
+        if (!isset($carroModel->nome) || $carroModel->nome == "") {
             $erros[] = "O campo nome é obrigatório";
         }
 
-        if (!isset($carroModel->placa) && $carroModel->placa == "") {
+        if (!isset($carroModel->placa) || $carroModel->placa == "") {
             $erros[] = "O campo placa é obrigatório";
         }
 

@@ -17,7 +17,16 @@ class Carro
 
     public function listAll()
     {
-        $sql = " SELECT * FROM tblCarros ";
+        $sql = " SELECT idCarro, 
+        nome, 
+        placa, 
+        date_format(dataEntrada, '%d-%m-%Y') as dataEntrada,
+        time_format(horaEntrada, '%H:%i') as horaEntrada,
+        time_format(horaSaida, '%H:%i') as horaSaida,
+        valorPago,
+        statusCarro,
+        idPreco
+        FROM tblCarros ";
 
         $stmt = Model::getConexao()->prepare($sql);
         $stmt->execute();

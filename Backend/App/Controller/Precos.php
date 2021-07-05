@@ -23,13 +23,13 @@ class Precos extends Controller
         $precoModel->demaisHoras = str_replace(",", ".", $novoPreco->demaisHoras);
 
 
-        $erros = $this->validarCampos();
-        if (count($erros) > 0) {
-            http_response_code(404);
-            echo json_encode($erros, JSON_UNESCAPED_UNICODE);
+        // $erros = $this->validarCampos();
+        // if (count($erros) > 0) {
+        //     http_response_code(404);
+        //     echo json_encode($erros, JSON_UNESCAPED_UNICODE);
 
-            exit();
-        }
+        //     exit();
+        // }
         $precoModel = $precoModel->insert();
 
         if ($precoModel) {
