@@ -105,6 +105,37 @@ const savePrice = async () => {
     }
 }
 
+const setReceipt = (index) => {
+    
+    const input = Array.from(document.querySelectorAll('#form-receipt input'));
+    input[0].value = db[index].nome;
+    input[1].value = db[index].placa;
+    input[2].value = db[index].data;
+    input[3].value = db[index].hora;
+}
+
+const getButtons = (event) => {
+    const button = event.target;
+    if (button.id == "button-receipt") {
+        const index = button.dataset.index;
+        console.log(index)
+        openModalReceipt();
+        setReceipt(index);
+    } else if (button.id == "button-exit") {
+        const index = button.dataset.index;
+        openModalExit();
+        setExit(index);
+    } else if (button.id == "button-edit") {
+        const index = button.dataset.index;
+        openModalEdit();
+        editCar(index);
+    }
+
+}
+
+const printRecipt = () => {
+    window.print();
+}
 
 // MODAL DE PREÇOS
 document.querySelector('#precos')
@@ -115,7 +146,8 @@ document.querySelector('#cancelar-prices')
     .addEventListener('click', () => { closeModalPrices(); clearInputs() });
 // *****************
 // // SELETOR DOS BOTÕES
-// document.querySelector('#tableCars').addEventListener('click', getButtons);
+document.querySelector('#tableCars')
+    .addEventListener('click', getButtons);
 // ******************
 //MODAL COMPROVANTE
 document.querySelector('#close-receipt')
@@ -138,5 +170,7 @@ document.querySelector('#salvar')
 //SALVAR PREÇO
 document.querySelector('#salvarPreco')
     .addEventListener('click', savePrice);
-
+// IMPRESÃO
+document.querySelector('#imprimir-receipt').addEventListener('click', printRecipt)
+document.querySelector('#imprimir-exit').addEventListener('click', printRecipt)
 updateTable();

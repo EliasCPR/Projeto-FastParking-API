@@ -20,7 +20,7 @@ class Carro
         $sql = " SELECT idCarro, 
         nome, 
         placa, 
-        date_format(dataEntrada, '%d-%m-%Y') as dataEntrada,
+        date_format(dataEntrada, '%d/%m/%Y') as dataEntrada,
         time_format(horaEntrada, '%H:%i') as horaEntrada,
         time_format(horaSaida, '%H:%i') as horaSaida,
         valorPago,

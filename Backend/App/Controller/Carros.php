@@ -15,6 +15,20 @@ class Carros extends Controller
         echo json_encode($carros, JSON_UNESCAPED_UNICODE);
     }
 
+    public function find($id)
+    {
+
+        $carroModel = $this->Model("Carro");
+        $carro = $carroModel->findById($id);
+
+        if ($carro) {
+            echo json_encode($carro, JSON_UNESCAPED_UNICODE);
+        } else {
+            http_response_code(400);
+            echo json_encode(["erro" => "Carro não encontrada"], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
     public function store()
     {
 
