@@ -19,6 +19,7 @@ const getCar = async (url) => {
     return json;
 }
 
+
 const createCar = async (carro) => {
     const url = 'http://api.fastparking.com.br/carros';
     const opitions = {
@@ -105,20 +106,47 @@ const savePrice = async () => {
     }
 }
 
-const setReceipt = (index) => {
-    
+const setReceipt = async (index) => {
+    const url = `http://api.fastparking.com.br/carros/${index}`;
+    const carro = await getCar(url);
     const input = Array.from(document.querySelectorAll('#form-receipt input'));
-    input[0].value = db[index].nome;
-    input[1].value = db[index].placa;
-    input[2].value = db[index].data;
-    input[3].value = db[index].hora;
+    input[0].value = carro.nome;
+    input[1].value = carro.placa;
+    input[2].value = carro.dataEntrada;
+    input[3].value = carro.horaEntrada;
+}
+
+
+const updateCar = async (carro, index) => {
+    
+    const url = `http://api.fastparking.com.br/carros/${index}`;
+    const opitions = {
+        method: 'PUT',
+        body: JSON.stringify(carro)
+    };
+    console.log(carro.target)
+    await fetch(url, opitions);
+}
+
+const fillInputsEdit = async (index) => {
+
+    const url = `http://api.fastparking.com.br/carros/${index}`;
+    const carro = await getCar(url);
+    
+    const newCar = {
+        nome: document.querySelector('#nome-edited').value = carro.nome,
+        placa: document.querySelector('#placa-edited').value = carro.placa
+    }
+    document.querySelector('#data').value = carro.dataEntrada;
+    document.querySelector('#hora').value = carro.horaEntrada;
+    
+   await updateCar(newCar, index);
 }
 
 const getButtons = (event) => {
     const button = event.target;
     if (button.id == "button-receipt") {
         const index = button.dataset.index;
-        console.log(index)
         openModalReceipt();
         setReceipt(index);
     } else if (button.id == "button-exit") {
@@ -128,7 +156,7 @@ const getButtons = (event) => {
     } else if (button.id == "button-edit") {
         const index = button.dataset.index;
         openModalEdit();
-        editCar(index);
+        fillInputsEdit(index);
     }
 
 }
@@ -170,6 +198,9 @@ document.querySelector('#salvar')
 //SALVAR PREÇO
 document.querySelector('#salvarPreco')
     .addEventListener('click', savePrice);
+//SALVAR EDITAR
+document.querySelector('#editar')
+    .addEventListener('click', updateCar);
 // IMPRESÃO
 document.querySelector('#imprimir-receipt').addEventListener('click', printRecipt)
 document.querySelector('#imprimir-exit').addEventListener('click', printRecipt)

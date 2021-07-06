@@ -79,7 +79,16 @@ class Carro
 
     public function findById($id)
     {
-        $sql = " SELECT * FROM tblCarros WHERE idCarro = ? ";
+        $sql = " SELECT idCarro, 
+        nome, 
+        placa, 
+        date_format(dataEntrada, '%d/%m/%Y') as dataEntrada,
+        time_format(horaEntrada, '%H:%i') as horaEntrada,
+        time_format(horaSaida, '%H:%i') as horaSaida,
+        valorPago,
+        statusCarro,
+        idPreco
+        FROM tblCarros WHERE idCarro = ? ";
 
         $stmt = Model::getConexao()->prepare($sql);
         $stmt->bindValue(1, $id);
