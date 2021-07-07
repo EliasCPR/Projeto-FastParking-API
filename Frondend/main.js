@@ -9,9 +9,6 @@ const closeModalReceipt = () => document.querySelector('#modal-receipt').classLi
 const openModalExit = () => document.querySelector('#modal-exit').classList.add('active');
 const closeModalExit = () => document.querySelector('#modal-exit').classList.remove('active');
 
-const openModalEdit = () => document.querySelector('#modal-edit').classList.add('active');
-const closeModalEdit = () => document.querySelector('#modal-edit').classList.remove('active');
-
 
 const getCar = async (url) => {
     const response = await fetch(url);
@@ -38,6 +35,15 @@ const createPrice = async (preco) => {
     await fetch(url, opitions);
 }
 
+const updateCar = async (carro, index) => {
+
+    const url = `http://api.fastparking.com.br/carros/${index}`;
+    const opitions = {
+        method: 'PUT',
+        body: JSON.stringify(carro)
+    };
+    await fetch(url, opitions);
+}
 
 const createRow = (carro, index) => {
     const tableCars = document.querySelector('#tableCars tbody')
@@ -49,9 +55,9 @@ const createRow = (carro, index) => {
         <td>${carro.dataEntrada}</td>
         <td>${carro.horaEntrada}</td>
         <td>
-            <button data-index="${index}" id="button-receipt" class="button green" type="button">Comp.</button>
-            <button data-index="${index}" id="button-edit" class="button blue" type="button">Editar</button>
-            <button data-index="${index}" id="button-exit" class="button red" type="button">Saída</button>
+            <button data-index="${index+1}" id="button-receipt" class="button green" type="button">Comp.</button>
+            <button data-index="${index+1}" id="button-edit" class="button blue" type="button">Editar</button>
+            <button data-index="${index+1}" id="button-exit" class="button red" type="button">Saída</button>
         </td>`;
 
     if (carro.statusCarro == 1) {
@@ -62,6 +68,7 @@ const createRow = (carro, index) => {
 const clearInputs = () => {
     const inputs = Array.from(document.querySelectorAll('input'));
     inputs.forEach(input => input.value = "");
+    document.getElementById('nome').dataset.idcar = "new";
 }
 
 const clearTable = () => {
@@ -86,9 +93,14 @@ const saveCar = async () => {
             nome: document.querySelector('#nome').value,
             placa: document.querySelector('#placa').value
         }
-        await createCar(newCar);
-        clearInputs();
+        const idCar = document.getElementById('nome').dataset.idcar;
+        if(idCar == "new"){
+            await createCar(newCar);
+        }else{
+            await updateCar(newCar, idCar);
+        }
         updateTable();
+        clearInputs();
     }
 }
 
@@ -116,31 +128,38 @@ const setReceipt = async (index) => {
     input[3].value = carro.horaEntrada;
 }
 
-
-const updateCar = async (carro, index) => {
-    
+const deleteCar = async (index) => {
     const url = `http://api.fastparking.com.br/carros/${index}`;
     const opitions = {
-        method: 'PUT',
-        body: JSON.stringify(carro)
-    };
-    console.log(carro.target)
+        method: 'DELETE'
+    }
     await fetch(url, opitions);
+}
+
+const setExit = async (index) => {
+    await deleteCar(index);
+    const carro = await getCar(`http://api.fastparking.com.br/carros/${index}`);
+
+    console.log(carro)
+
+    const input = Array.from(document.querySelectorAll('#form-exit input'));
+    input[0].value = carro.nome;
+    input[1].value = carro.placa;
+    input[2].value = carro.horaEntrada;
+    input[3].value = carro.horaSaida;
+    input[4].value = carro.valorPago;
+
+    updateTable();
 }
 
 const fillInputsEdit = async (index) => {
 
     const url = `http://api.fastparking.com.br/carros/${index}`;
     const carro = await getCar(url);
-    
-    const newCar = {
-        nome: document.querySelector('#nome-edited').value = carro.nome,
-        placa: document.querySelector('#placa-edited').value = carro.placa
-    }
-    document.querySelector('#data').value = carro.dataEntrada;
-    document.querySelector('#hora').value = carro.horaEntrada;
-    
-   await updateCar(newCar, index);
+    document.querySelector('#nome').value = carro.nome
+    document.querySelector('#placa').value = carro.placa
+    document.getElementById('nome').dataset.idcar = carro.idCarro;
+   
 }
 
 const getButtons = (event) => {
@@ -155,7 +174,6 @@ const getButtons = (event) => {
         setExit(index);
     } else if (button.id == "button-edit") {
         const index = button.dataset.index;
-        openModalEdit();
         fillInputsEdit(index);
     }
 
@@ -187,20 +205,12 @@ document.querySelector('#close-exit')
     .addEventListener('click', () => { closeModalExit(); clearInputs() });
 document.querySelector('#cancelar-exit')
     .addEventListener('click', () => { closeModalExit(); clearInputs() });
-//MODAL EDITAR
-document.querySelector('#close-edit')
-    .addEventListener('click', () => { closeModalEdit(); clearInputs() });
-document.querySelector('#cancelar-edit')
-    .addEventListener('click', () => { closeModalEdit(); clearInputs() });
 //SALVAR CARRO
 document.querySelector('#salvar')
     .addEventListener('click', saveCar);
 //SALVAR PREÇO
 document.querySelector('#salvarPreco')
     .addEventListener('click', savePrice);
-//SALVAR EDITAR
-document.querySelector('#editar')
-    .addEventListener('click', updateCar);
 // IMPRESÃO
 document.querySelector('#imprimir-receipt').addEventListener('click', printRecipt)
 document.querySelector('#imprimir-exit').addEventListener('click', printRecipt)

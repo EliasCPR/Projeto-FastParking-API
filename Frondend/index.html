@@ -27,7 +27,7 @@
             <form class="form" id="form-register">
                 <div>
                     <label for="nome">Nome</label>
-                    <input type="text" class="input-form" id="nome" placeholder="Nome" required />
+                    <input type="text" class="input-form" id="nome" placeholder="Nome" data-idcar="new" required />
                 </div>
                 <div>
                     <label for="placa">Placa</label>
@@ -79,39 +79,7 @@
                 </footer>
             </div>
         </div>
-        <!-- MODAL EDITAR -->
-        <div class="modal" id="modal-edit">
-            <div class="modal-content">
-                <header class="modal-header">
-                    <h1>Editar</h1>
-                    <span class="close-button" id="close-edit">&#10006;</span>
-                </header>
-
-                <form class="form" id="form-edit">
-                    <div>
-                        <label for="nome-edited">Nome</label>
-                        <input type="text" class="input-form" id="nome-edited" required />
-                    </div>
-                    <div>
-                        <label for="placa-edited">Placa</label>
-                        <input type="text" class="input-form" id="placa-edited" required />
-                    </div>
-                    <div>
-                        <label for="data">Data</label>
-                        <input type="text" class="input-readonly" id="data" readonly />
-                    </div>
-                    <div>
-                        <label for="hora">Hora de Entrada</label>
-                        <input type="text" class="input-readonly" id="hora" readonly />
-                    </div>
-                </form>
-
-                <footer class="modal-footer">
-                    <button type="submit" class="button green" id="editar">Salvar</button>
-                    <button type="button" class="button red" id="cancelar-edit">Cancelar</button>
-                </footer>
-            </div>
-        </div>
+    
         <!-- MODAL DE COMPROVANTE -->
         <div class="modal" id="modal-receipt">
             <div class="modal-content">
