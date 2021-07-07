@@ -183,6 +183,7 @@ const printRecipt = () => {
     window.print();
 }
 
+
 // MODAL DE PREÇOS
 document.querySelector('#precos')
     .addEventListener('click', () => { openModalPrices(); clearInputs() });
@@ -214,4 +215,5 @@ document.querySelector('#salvarPreco')
 // IMPRESÃO
 document.querySelector('#imprimir-receipt').addEventListener('click', printRecipt)
 document.querySelector('#imprimir-exit').addEventListener('click', printRecipt)
+
 updateTable();

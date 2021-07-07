@@ -17,19 +17,21 @@ class Precos extends Controller
     {
         $novoPreco = $this->getRequestBody();
 
+        $erros = $this->validarCampos($novoPreco->primeiraHora, $novoPreco->demaisHoras);
+        if (count($erros) > 0) {
+            http_response_code(404);
+            echo json_encode($erros, JSON_UNESCAPED_UNICODE);
+
+            exit();
+        }
+
         $precoModel = $this->Model("Preco");
 
         $precoModel->primeiraHora = str_replace(",", ".", $novoPreco->primeiraHora);
         $precoModel->demaisHoras = str_replace(",", ".", $novoPreco->demaisHoras);
 
 
-        // $erros = $this->validarCampos();
-        // if (count($erros) > 0) {
-        //     http_response_code(404);
-        //     echo json_encode($erros, JSON_UNESCAPED_UNICODE);
 
-        //     exit();
-        // }
         $precoModel = $precoModel->insert();
 
         if ($precoModel) {
@@ -42,20 +44,19 @@ class Precos extends Controller
         }
     }
 
-    private function validarCampos()
+    private function validarCampos($primeiraHora, $demaisHoras)
     {
-        $precoModel = $this->Model("Preco");
         $erros = [];
 
-        if (!isset($precoModel->primeiraHora) && $precoModel->primeiraHora == "") {
+        if (!isset($primeiraHora) && $primeiraHora == "") {
             $erros[] = "O campo primeira hora é obrigatório";
-        } elseif (!is_numeric(str_replace(",", ".", $precoModel->primeiraHora))) {
+        } elseif (!is_numeric(str_replace(",", ".", $primeiraHora))) {
             $erros[] = "O campo primeira hora deve ser um número";
         }
 
-        if (!isset($precoModel->demaisHoras) && $precoModel->demaisHoras == "") {
+        if (!isset($demaisHoras) && $demaisHoras == "") {
             $erros[] = "O campo demais horas é obrigatório";
-        } elseif (!is_numeric(str_replace(",", ".", $precoModel->demaisHoras))) {
+        } elseif (!is_numeric(str_replace(",", ".", $demaisHoras))) {
             $erros[] = "O campo demais horas deve ser um número";
         }
 

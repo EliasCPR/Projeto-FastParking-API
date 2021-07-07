@@ -34,19 +34,20 @@ class Carros extends Controller
 
         $novoCarro = $this->getRequestBody();
 
+        $erros = $this->validarCampos($novoCarro->nome, $novoCarro->placa);
+        if (count($erros) > 0) {
+            http_response_code(404);
+            echo json_encode($erros, JSON_UNESCAPED_UNICODE);
+
+            exit();
+        }
+
         $carroModel = $this->Model("Carro");
 
         $carroModel->nome = $novoCarro->nome;
         $carroModel->placa = $novoCarro->placa;
         $carroModel->idPreco = $carroModel->getPreco()->idPreco;
-
-        // $erros = $this->validarCampos();
-        // if (count($erros) > 0) {
-        //     http_response_code(404);
-        //     echo json_encode($erros, JSON_UNESCAPED_UNICODE);
-
-        //     exit();
-        // }
+        
         $carroModel = $carroModel->insert();
 
         if ($carroModel) {
@@ -61,6 +62,14 @@ class Carros extends Controller
     {
         $carroEditar = $this->getRequestBody();
 
+        $erros = $this->validarCampos($carroEditar->nome, $carroEditar->placa);
+        if (count($erros) > 0) {
+            http_response_code(404);
+            echo json_encode($erros, JSON_UNESCAPED_UNICODE);
+
+            exit();
+        }
+
         $carroModel = $this->Model("Carro");
         $carroModel = $carroModel->findById($id);
 
@@ -72,14 +81,6 @@ class Carros extends Controller
 
         $carroModel->nome = $carroEditar->nome;
         $carroModel->placa = $carroEditar->placa;
-
-        // $erros = $this->validarCampos();
-        // if (count($erros) > 0) {
-        //     http_response_code(404);
-        //     echo json_encode($erros, JSON_UNESCAPED_UNICODE);
-
-        //     exit();
-        // }
 
         if ($carroModel->update()) {
             http_response_code(204);
@@ -119,12 +120,6 @@ class Carros extends Controller
             $carroModel->valorPago = floatval($valorPrimeiraHora);
         }
 
-        // horaSaida
-        // $carroModel->horaSaida = $carroModel->getNowHour()->hora;
-        // $diferençaHoras = $carroModel->getDiference();
-
-        // $horaEntrada = $carroModel->getHourIn($carroModel->horaEntrada);
-        // $horaSaida = $carroModel->getHourIn($carroModel->horaSaida);
 
         if ($carroModel->delete()) {
             http_response_code(204);
@@ -134,16 +129,15 @@ class Carros extends Controller
         }
     }
 
-    private function validarCampos()
+    private function validarCampos($nome, $placa)
     {
-        $carroModel = $this->Model("Carro");
         $erros = [];
 
-        if (!isset($carroModel->nome) || $carroModel->nome == "") {
+        if (!isset($nome) || $nome == "") {
             $erros[] = "O campo nome é obrigatório";
         }
 
-        if (!isset($carroModel->placa) || $carroModel->placa == "") {
+        if (!isset($placa) || $placa == "") {
             $erros[] = "O campo placa é obrigatório";
         }
 
