@@ -183,6 +183,18 @@ const printRecipt = () => {
     window.print();
 }
 
+const mask = (text) =>{
+    
+    text = text.replace(/^(\d)/g, "")
+    text = text.replace(/^([a-z-\W])/g, "")
+    text = text.replace(/^([A-Z]{3})(\d*)$/, "$1-$2")
+
+    return text;
+}
+
+const applyMask = (event) => {
+    event.target.value = mask(event.target.value);
+}
 
 // MODAL DE PREÇOS
 document.querySelector('#precos')
@@ -215,5 +227,8 @@ document.querySelector('#salvarPreco')
 // IMPRESÃO
 document.querySelector('#imprimir-receipt').addEventListener('click', printRecipt)
 document.querySelector('#imprimir-exit').addEventListener('click', printRecipt)
+//MASCARA
+document.querySelector('#placa')
+    .addEventListener('keyup', applyMask);
 
 updateTable();
