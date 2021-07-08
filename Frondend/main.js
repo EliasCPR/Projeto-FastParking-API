@@ -18,7 +18,7 @@ const getCar = async (url) => {
 
 
 const createCar = async (carro) => {
-    const url = 'http://api.fastparking.com.br/carros';
+    const url = 'https://mnemotechnic-foreca.000webhostapp.com/fastparkingapi/carros';
     const opitions = {
         method: 'POST',
         body: JSON.stringify(carro)
@@ -27,7 +27,7 @@ const createCar = async (carro) => {
 }
 
 const createPrice = async (preco) => {
-    const url = 'http://api.fastparking.com.br/precos';
+    const url = 'https://mnemotechnic-foreca.000webhostapp.com/fastparkingapi/precos';
     const opitions = {
         method: 'POST',
         body: JSON.stringify(preco)
@@ -37,7 +37,7 @@ const createPrice = async (preco) => {
 
 const updateCar = async (carro, index) => {
 
-    const url = `http://api.fastparking.com.br/carros/${index}`;
+    const url = `https://mnemotechnic-foreca.000webhostapp.com/fastparkingapi/carros/${index}`;
     const opitions = {
         method: 'PUT',
         body: JSON.stringify(carro)
@@ -80,7 +80,7 @@ const clearTable = () => {
 
 const updateTable = async () => {
     clearTable();
-    const url = 'http://api.fastparking.com.br/carros';
+    const url = 'https://mnemotechnic-foreca.000webhostapp.com/fastparkingapi/carros';
     const carros = await getCar(url);
     carros.forEach(createRow);
 }
@@ -119,7 +119,7 @@ const savePrice = async () => {
 }
 
 const setReceipt = async (index) => {
-    const url = `http://api.fastparking.com.br/carros/${index}`;
+    const url = `https://mnemotechnic-foreca.000webhostapp.com/fastparkingapi/carros/${index}`;
     const carro = await getCar(url);
     const input = Array.from(document.querySelectorAll('#form-receipt input'));
     input[0].value = carro.nome;
@@ -129,7 +129,7 @@ const setReceipt = async (index) => {
 }
 
 const deleteCar = async (index) => {
-    const url = `http://api.fastparking.com.br/carros/${index}`;
+    const url = `https://mnemotechnic-foreca.000webhostapp.com/fastparkingapi/carros/${index}`;
     const opitions = {
         method: 'DELETE'
     }
@@ -138,7 +138,7 @@ const deleteCar = async (index) => {
 
 const setExit = async (index) => {
     await deleteCar(index);
-    const carro = await getCar(`http://api.fastparking.com.br/carros/${index}`);
+    const carro = await getCar(`https://mnemotechnic-foreca.000webhostapp.com/fastparkingapi/carros/${index}`);
 
     console.log(carro)
 
@@ -154,7 +154,7 @@ const setExit = async (index) => {
 
 const fillInputsEdit = async (index) => {
 
-    const url = `http://api.fastparking.com.br/carros/${index}`;
+    const url = `https://mnemotechnic-foreca.000webhostapp.com/fastparkingapi/carros/${index}`;
     const carro = await getCar(url);
     document.querySelector('#nome').value = carro.nome
     document.querySelector('#placa').value = carro.placa
